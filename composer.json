@@ -1,0 +1,15 @@
+{
+    "name": "jasonasante/toucantech",
+    "authors": [
+        {
+            "name": "jasonasante",
+            "email": "jason.asante@outlook.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "MVC\\": "./src/"
+        }
+    }
+}
