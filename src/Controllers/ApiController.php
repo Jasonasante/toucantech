@@ -1,51 +1,65 @@
 <?php
 
 namespace MVC\Controllers;
-use MVC\Controller;
+
+// Enable CORS (Cross-Origin Resource Sharing)
 header('Access-Control-Allow-Origin: http://localhost:3000');
-            header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-            header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+use MVC\Controller;
 
 class ApiController extends Controller {
-    private $conn;
+    // Function to get information for all schools and members
+    public function getAllInfo() {
+        $conn=$this->openMySQL();
 
-    public function processRequest() {
-        $servername = "127.0.0.1";
-        $username = getenv('DB_USERNAME');
-        $password = getenv('DB_PASSWORD');
-        $dbname = "toucantech";
-    
-        $conn = new \mysqli($servername, $username, $password, $dbname);;
-    
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        $data = json_decode(file_get_contents('php://input'), true);
-       if ($data['action'] === 'getSchools') {
-            $sql = "SELECT * FROM schools";
-            $result = $conn->query($sql);
+        // get schools information
+        $sql = "SELECT * FROM schools";
+        $result = $conn->query($sql);
+        $schools;
         if ($result) {
             $schools = $result->fetch_all(MYSQLI_ASSOC);
-            echo json_encode($schools);
         } else {
             echo json_encode(['error' => $conn->error]);
+            exit;
         }
-        } elseif ($data['action'] === 'getUsers') {
-            $school = $data['school'];
-            if ($school === 'all') {
-                $sql = "SELECT * FROM users";
-            } else {
-                $sql = "SELECT * FROM users WHERE school_id = $school";
-            }
+
+        // get members information
+        $sql = "SELECT * FROM members";
+        $result = $conn->query($sql);
+         $members;
+        if ($result) {
+            $members = $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            echo json_encode(['error' => $conn->error]);
+            exit;
+        }
         
-            $result = $conn->query($sql);
-        
-            if ($result) {
-                $users = $result->fetch_all(MYSQLI_ASSOC);
-                echo json_encode($users);
-            } else {
-                echo json_encode(['error' => $conn->error]);
-            }
+        // combine and send data
+        echo json_encode(['schools' => $schools, 'members'=>$members]);
+        $conn->close();
+    }
+
+    // Function to process requests based on the school parameter
+    public function processRequest() {
+        $conn=$this->openMySQL();
+        $data = json_decode(file_get_contents('php://input'), true);
+        $school = $data['school'];
+
+        if ($school === 'all') {
+            $sql = "SELECT * FROM members";
+        } else {
+            $sql = "SELECT * FROM members WHERE school_id = $school";
+        }
+    
+        // execute query and return the result
+        $result = $conn->query($sql);
+        if ($result) {
+            $members = $result->fetch_all(MYSQLI_ASSOC);
+            echo json_encode($members);
+        } else {
+            echo json_encode(['error' => $conn->error]);
         }
         $conn->close();
     }
