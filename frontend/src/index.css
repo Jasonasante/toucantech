@@ -44,3 +44,45 @@ code {
   grid-template-columns: 1fr 1fr;
   justify-items: center;
 }
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #ccc;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+label {
+  margin-right: 10px;
+}
+
+select {
+  padding: 5px;
+  font-size: 14px;
+}
+
+button {
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+

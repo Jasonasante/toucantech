@@ -47,16 +47,16 @@ function App() {
     <>
       <div className='header'>
         <h1>Schools</h1>
-
+        <div className="container">
         <label htmlFor="schools">Choose a School:</label>
-        <select name="school" id="schools" value={selectedSchool} onChange={handleSchoolChange}>
-          <option value="all">All</option>
-          {schools.map(school => (
-            <option key={school.id} value={school.id}>{school.name}</option>
-          ))}
-        </select>
-
-        <button type="button" onClick={openForm}>+</button>
+          <select name="school" id="schools" value={selectedSchool} onChange={handleSchoolChange}>
+            <option value="all">All</option>
+            {schools.map(school => (
+              <option key={school.id} value={school.id}>{school.name}</option>
+            ))}
+          </select>
+          <button type="button" onClick={openForm}>+</button>
+        </div>
       </div>
       <div className='info-display'>
 
